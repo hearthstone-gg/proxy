@@ -1,0 +1,48 @@
+{
+    "apps": [{
+        "name": "api",
+        "script": "index.js",
+        "watch": true,
+        "merge_logs": true,
+        "cwd": "../api/",
+        "env": {
+            "NODE_ENV": "production"
+        }
+    }, {
+        "name": "app",
+        "script": "index.js",
+        "watch": true,
+        "merge_logs": true,
+        "cwd": "../app/",
+        "env": {
+            "NODE_ENV": "production"
+        }
+    }, {
+        "name": "auth",
+        "script": "app.js",
+        "watch": true,
+        "merge_logs": true,
+        "cwd": "../auth/",
+        "env": {
+            "NODE_ENV": "production"
+        }
+    }, {
+        "name": "cron",
+        "script": "index.js",
+        "watch": true,
+        "merge_logs": true,
+        "cwd": "../cron/",
+        "env": {
+            "NODE_ENV": "production"
+        }
+    }, {
+        "name": "socket",
+        "script": "index.js",
+        "watch": true,
+        "merge_logs": true,
+        "cwd": "../socket/",
+        "env": {
+            "NODE_ENV": "production"
+        }
+    }]
+}
