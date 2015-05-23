@@ -24,7 +24,7 @@ function proxyHttp(req, res) {
 	if (service.proxySocket) {
 		opt.ws = true;
 	}
-
+	console.log(service)
 	proxy.web(req, res, opt, function(e) {
 		console.log(e);
 	});
@@ -46,6 +46,6 @@ function proxyHttps(req, res) {
 	}
 }
 
-//bind to 80 and 443
-http.createServer(proxyHttp).listen(80);
-https.createServer(cert, proxyHttps).listen(443);
+//bind to ports
+http.createServer(proxyHttp).listen(config.port);
+https.createServer(cert, proxyHttps).listen(config.httpsPort);
