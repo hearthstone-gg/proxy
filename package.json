@@ -11,6 +11,8 @@
   "license": "BSD-2-Clause",
   "dependencies": {
     "http-proxy": "~1.11.1",
-    "pm2": "~0.12.14"
+    "pm2": "~0.12.14",
+    "yargs": "~3.9.1",
+    "hs.gg-config": "git+https://github.com/hearthstone-gg/config.git"
   }
 }

@@ -1,41 +1,51 @@
 var httpProxy = require('http-proxy');
-var fs = require('fs');
-var path = require('path');
+var argv = require('yargs').argv;
+var http = require('http');
+var https = require('https');
+
+var servicesConfig = require('hs.gg-config');
+var config = servicesConfig.get(argv.env || 'local');
+
+var cert = config.cert;
+
 var proxy = httpProxy.createProxy();
-var cert = {
-	key: fs.readFileSync(path.join(__dirname, '../auth/server/sslcert/localhost.key'), 'utf8'),
-	cert: fs.readFileSync(path.join(__dirname, '../auth/server/sslcert/localhost.cert'), 'utf8')
-};
 
-var options = {
-	'local-auth.hearthstone.gg': 'http://localhost:3002',
-	'local-api.hearthstone.gg': 'http://localhost:3000',
-	'local-socket.hearthstone.gg': 'http://localhost:3003',
-	'local-app.hearthstone.gg': 'http://localhost:3001'
-};
-
-require('http').createServer(function(req, res) {
+function notFound(res) {
+	res.writeHead(404);
+	res.end('Not found');
+}
+//proxy a request to a service
+//also proxies websockets if service.proxySocket is true
+function proxyHttp(req, res) {
+	var service = config.findByDomain(req.headers.host);
 	var opt = {
-		target: options[req.headers.host]
+		target: service.serviceAddress
 	};
-	if (req.headers.host === 'local-socket.hearthstone.gg') {
+	if (service.proxySocket) {
 		opt.ws = true;
 	}
 
 	proxy.web(req, res, opt, function(e) {
 		console.log(e);
 	});
-}).listen(80);
+}
 
-require('https').createServer(cert, function(req, res) {
-	if (req.headers.host === 'local-auth.hearthstone.gg') {
+//if service.https is true, proxy all http requests to https for the service
+function proxyHttps(req, res) {
+	var service = config.findByDomain(req.headers.host);
+	if (!service) { return notFound(res); }
+
+	if (service.https) {
 		proxy.web(req, res, {
-			target: 'https://localhost:3004',
+			target: service.redirectTo,
 			ssl: cert,
 			secure: false
 		});
 	} else {
-		res.writeHead(404);
-		res.end('Not found');
+		notFound(res);
 	}
-}).listen(443);
+}
+
+//bind to 80 and 443
+http.createServer(proxyHttp).listen(80);
+https.createServer(cert, proxyHttps).listen(443);
