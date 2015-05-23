@@ -13,7 +13,3 @@ Run
 
 ```sudo npm start```
 ```pm2 start pm2.json```
-
-TODO -
-
-1. get hstrny onto the new apps

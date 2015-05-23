@@ -5,7 +5,6 @@ var https = require('https');
 
 var servicesConfig = require('hs.gg-config');
 var config = servicesConfig.get(argv.env || 'local');
-
 var cert = config.cert;
 
 var proxy = httpProxy.createProxy();
@@ -45,7 +44,6 @@ function proxyHttps(req, res) {
 		notFound(res);
 	}
 }
-
 //bind to ports
-http.createServer(proxyHttp).listen(config.port);
-https.createServer(cert, proxyHttps).listen(config.httpsPort);
+http.createServer(proxyHttp).listen(config.services.port);
+https.createServer(cert, proxyHttps).listen(config.services.httpsPort);
