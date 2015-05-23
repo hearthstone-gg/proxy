@@ -13,9 +13,11 @@ function notFound(res) {
 	res.writeHead(404);
 	res.end('Not found');
 }
+
 //proxy a request to a service
 //also proxies websockets if service.proxySocket is true
 function proxyHttp(req, res) {
+	if (req.url === '/services.json') { return res.end(JSON.stringify(config.sanitize(config))); }
 	var service = config.findByDomain(req.headers.host);
 	var opt = {
 		target: service.serviceAddress
@@ -23,7 +25,6 @@ function proxyHttp(req, res) {
 	if (service.proxySocket) {
 		opt.ws = true;
 	}
-	console.log(service)
 	proxy.web(req, res, opt, function(e) {
 		console.log(e);
 	});
