@@ -52,5 +52,14 @@
         "env": {
             "NODE_ENV": "production"
         }
+    }, {
+        "name": "admin",
+        "script": "index.js",
+        "watch": true,
+        "merge_logs": true,
+        "cwd": "../admin/",
+        "env": {
+            "NODE_ENV": "production"
+        }
     }]
 }
