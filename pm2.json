@@ -44,5 +44,13 @@
         "env": {
             "NODE_ENV": "production"
         }
+    }, {
+        "name": "proxy",
+        "script": "index.js",
+        "watch": true,
+        "merge_logs": true,
+        "env": {
+            "NODE_ENV": "production"
+        }
     }]
 }
